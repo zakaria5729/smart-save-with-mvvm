@@ -14,8 +14,9 @@ import com.zakariahossain.mvvmtodoapp.R;
 
 import java.util.Objects;
 
-public class AddNoteActivity extends AppCompatActivity {
+public class AddEditNoteActivity extends AppCompatActivity {
 
+    public static final String KEY_ID = "KEY_ID";
     public static final String KEY_TITLE = "KEY_TITLE";
     public static final String KEY_DESCRIPTION = "KEY_DESCRIPTION";
     public static final String KEY_PRIORITY = "KEY_PRIORITY";
@@ -36,12 +37,21 @@ public class AddNoteActivity extends AppCompatActivity {
         priorityPicker.setMaxValue(10);
 
         Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.ic_close);
-        setTitle("Add Note");
+
+        if (getIntent().hasExtra(KEY_ID)) {
+            setTitle("Edit Note");
+            Objects.requireNonNull(titleInput.getEditText()).setText(getIntent().getStringExtra(KEY_TITLE));
+            Objects.requireNonNull(descriptionInput.getEditText()).setText(getIntent().getStringExtra(KEY_DESCRIPTION));
+            priorityPicker.setValue(getIntent().getIntExtra(KEY_PRIORITY, 1));
+        } else {
+            setTitle("Add Note");
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.menu_save).setVisible(true);
         return true;
     }
 
@@ -68,6 +78,11 @@ public class AddNoteActivity extends AppCompatActivity {
             data.putExtra(KEY_TITLE, title);
             data.putExtra(KEY_DESCRIPTION, description);
             data.putExtra(KEY_PRIORITY, priority);
+            data.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+            if (getIntent().getIntExtra(KEY_ID, -1) != -1) {
+                data.putExtra(KEY_ID, getIntent().getIntExtra(KEY_ID, 1));
+            }
 
             setResult(RESULT_OK, data);
             finish();

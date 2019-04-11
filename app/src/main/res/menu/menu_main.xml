@@ -5,6 +5,12 @@
     <item android:id="@+id/menu_save"
         android:title="Save"
         android:icon="@drawable/ic_save"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        android:visible="false" />
+
+    <item android:id="@+id/menu_delete_all"
+        android:title="Delete all notes"
+        app:showAsAction="never"
+        android:visible="false" />
 
 </menu>
